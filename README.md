@@ -1,15 +1,27 @@
 # TITAN75-Android
 
-موتور کامل `TITAN_PRO_V75_PWA.py` داخل اپ اندروید (Chaquopy + Flask).
+موتور کامل **TITAN_PRO_V75_PWA.py** → APK اندروید
 
-## دانلود APK
+مخزن: https://github.com/ehsanrahmanii-code/TITAN75-Android
 
-پس از سبز شدن Actions:
+## قدم ۱ — آپلود کد (الزامی)
 
-1. برو به تب Actions
-2. آخرین بیلد موفق را باز کن
-3. Artifacts → **titan-v75-apk**
+1. برو به این مسیر در گیت‌هاب:
+   https://github.com/ehsanrahmanii-code/TITAN75-Android/upload/main/app/src/main/python
+2. فایل `TITAN_PRO_V75_PWA.py` را بکش و رها کن (Upload)
+3. Commit changes
+
+## قدم ۲ — بیلد خودکار
+
+بعد از آپلود، Actions خودکار APK می‌سازد.
+
+یا دستی:
+Actions → Build APK → Run workflow
+
+## قدم ۳ — دانلود
+
+Artifacts → **titan-v75-apk**
 
 ## فقط تحلیل
 
-هیچ سفارشی اجرا نمی‌شود.
+هیچ سفارش واقعی اجرا نمی‌شود.

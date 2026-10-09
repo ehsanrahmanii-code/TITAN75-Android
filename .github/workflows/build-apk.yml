@@ -34,22 +34,23 @@ jobs:
           "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;26.1.10909125"
           echo "sdk.dir=$SDK_ROOT" > local.properties
 
-      - name: Place TITAN engine
+      - name: Verify TITAN engine file
         run: |
           set -e
           mkdir -p app/src/main/python
+          # Accept file at either location
+          if [ -f TITAN_PRO_V75_PWA.py ] && [ ! -f app/src/main/python/TITAN_PRO_V75_PWA.py ]; then
+            cp TITAN_PRO_V75_PWA.py app/src/main/python/
+          fi
           if [ ! -f app/src/main/python/TITAN_PRO_V75_PWA.py ]; then
-            # from local attachment mirror if present in repo assets, else download
-            if [ -f TITAN_PRO_V75_PWA.py ]; then
-              cp TITAN_PRO_V75_PWA.py app/src/main/python/
-            else
-              curl -fsSL -o app/src/main/python/TITAN_PRO_V75_PWA.py \
-                "https://raw.githubusercontent.com/ehsanrahmanii-code/TITAN-Pro-Android/main/app/src/main/python/TITAN_PRO_V75_PWA.py"
-            fi
+            echo "ERROR: TITAN_PRO_V75_PWA.py is missing."
+            echo "Upload it to: app/src/main/python/TITAN_PRO_V75_PWA.py"
+            exit 1
           fi
           wc -c app/src/main/python/TITAN_PRO_V75_PWA.py
           test -s app/src/main/python/TITAN_PRO_V75_PWA.py
           test -f app/src/main/python/titan_bootstrap.py
+          head -c 40 app/src/main/python/TITAN_PRO_V75_PWA.py; echo
 
       - name: Gradle wrapper
         run: |
