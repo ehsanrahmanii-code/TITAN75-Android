@@ -18,6 +18,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Setup Python 3.11 (Chaquopy buildpython)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Install Android SDK
         run: |
           set -e
@@ -38,19 +43,15 @@ jobs:
         run: |
           set -e
           mkdir -p app/src/main/python
-          # Accept file at either location
           if [ -f TITAN_PRO_V75_PWA.py ] && [ ! -f app/src/main/python/TITAN_PRO_V75_PWA.py ]; then
             cp TITAN_PRO_V75_PWA.py app/src/main/python/
           fi
-          if [ ! -f app/src/main/python/TITAN_PRO_V75_PWA.py ]; then
-            echo "ERROR: TITAN_PRO_V75_PWA.py is missing."
-            echo "Upload it to: app/src/main/python/TITAN_PRO_V75_PWA.py"
-            exit 1
-          fi
-          wc -c app/src/main/python/TITAN_PRO_V75_PWA.py
+          test -f app/src/main/python/TITAN_PRO_V75_PWA.py
           test -s app/src/main/python/TITAN_PRO_V75_PWA.py
           test -f app/src/main/python/titan_bootstrap.py
-          head -c 40 app/src/main/python/TITAN_PRO_V75_PWA.py; echo
+          wc -c app/src/main/python/TITAN_PRO_V75_PWA.py
+          python3.11 --version
+          which python3.11
 
       - name: Gradle wrapper
         run: |
@@ -72,7 +73,12 @@ jobs:
       - name: Build Debug APK
         env:
           GRADLE_OPTS: -Xmx4g -Dorg.gradle.daemon=false
-        run: ./gradlew assembleDebug --stacktrace --no-daemon
+        run: |
+          set -e
+          # Make sure Chaquopy finds python3.11
+          export PATH="$(dirname $(which python3.11)):$PATH"
+          python3.11 --version
+          ./gradlew assembleDebug --stacktrace --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
